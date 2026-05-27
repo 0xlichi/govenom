@@ -8,17 +8,15 @@ import (
 	"strings"
 )
 
+// Save appends lines, deduplicates and sorts - use for subdomains and similar list output
 func Save(host, category string, lines []string) error {
 	filePath := filepath.Join("logs", host, category+".txt")
 	os.MkdirAll(filepath.Dir(filePath), 0o755)
 
-	// Read existing content
 	existing, _ := os.ReadFile(filePath)
 
-	// Merge old + new lines
 	all := append(strings.Split(string(existing), "\n"), lines...)
 
-	// Deduplicate and sort
 	seen := make(map[string]bool)
 	var unique []string
 	for _, line := range all {
@@ -29,6 +27,12 @@ func Save(host, category string, lines []string) error {
 	}
 	sort.Strings(unique)
 
-	// Write back
 	return os.WriteFile(filePath, []byte(strings.Join(unique, "\n")+"\n"), 0o644)
+}
+
+// SaveRaw writes lines as-is without sorting or deduplicating
+func SaveRaw(host, category string, lines []string) error {
+	filePath := filepath.Join("logs", host, category+".txt")
+	os.MkdirAll(filepath.Dir(filePath), 0o755)
+	return os.WriteFile(filePath, []byte(strings.Join(lines, "\n")+"\n"), 0o644)
 }

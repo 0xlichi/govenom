@@ -8,6 +8,7 @@ import (
 	"github.com/0xlichi/govenom/input"
 	"github.com/0xlichi/govenom/output"
 	"github.com/0xlichi/govenom/ping"
+	netscanning "github.com/0xlichi/govenom/reconnaissance/network"
 	subenum "github.com/0xlichi/govenom/reconnaissance/subdomain_enumeration"
 	"github.com/0xlichi/govenom/ui/banner"
 )
@@ -28,6 +29,7 @@ func main() {
 	startTime := time.Now()
 
 	subenum.Subfinder(host)
+	netscanning.Nmap(host)
 
 	fmt.Println(output.Info(fmt.Sprintf("Execution done in %v", time.Since(startTime))))
 }
