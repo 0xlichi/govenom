@@ -21,6 +21,7 @@ func Nmap(host string) error {
 	out, err := exec.Command("nmap", host, "-Pn", "-r", "--open", "--reason").Output()
 	if err != nil {
 		fmt.Println(output.Error(fmt.Sprintf("nmap failed: %v", err)))
+		fmt.Println(output.Warning("Failed to run nmap, manual investigation needed."))
 		return err
 	}
 
