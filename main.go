@@ -32,8 +32,9 @@ func main() {
 
 	var wg sync.WaitGroup
 
-	fmt.Println(output.Info("Running subfinder..."))
-	fmt.Println(output.Info("Running nmap..."))
+	fmt.Println(output.Info("Initializing subfinder..."))
+	fmt.Println(output.Info("Initializing nmap..."))
+	fmt.Println(output.Info("Initializing wafw00f"))
 
 	wg.Add(3)
 	go func() { defer wg.Done(); subenum.Subfinder(host) }()

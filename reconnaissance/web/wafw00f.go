@@ -13,7 +13,7 @@ import (
 func Wafw00f(host string) error {
 	// Skip if output already exists
 	if logger.Exists(host, "nmap/nmap-results") {
-		fmt.Println(output.Warning("nmap: output already exists, skipping."))
+		fmt.Println(output.Warning("wafw00f: output already exists, skipping."))
 		return nil
 	}
 
@@ -21,6 +21,7 @@ func Wafw00f(host string) error {
 	out, err := exec.Command("wafw00f", "-a", "-v", host).Output()
 	if err != nil {
 		fmt.Println(output.Error(fmt.Sprintf("wafw00f failed: %v", err)))
+		fmt.Println(output.Warning("Failed to run nmap, manual investigation needed."))
 		return err
 	}
 
