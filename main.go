@@ -9,10 +9,10 @@ import (
 	"github.com/0xlichi/govenom/input"
 	"github.com/0xlichi/govenom/output"
 	"github.com/0xlichi/govenom/ping"
-	dnsrecon "github.com/0xlichi/govenom/reconnaissance/dns"
-	netscanning "github.com/0xlichi/govenom/reconnaissance/network"
-	subenum "github.com/0xlichi/govenom/reconnaissance/subdomain_enumeration"
-	webrecon "github.com/0xlichi/govenom/reconnaissance/web"
+	dnsrecon "github.com/0xlichi/govenom/recon/dns"
+	netscanning "github.com/0xlichi/govenom/recon/network"
+	subenum "github.com/0xlichi/govenom/recon/subdomain_enumeration"
+	webrecon "github.com/0xlichi/govenom/recon/web"
 	"github.com/0xlichi/govenom/ui/banner"
 )
 
