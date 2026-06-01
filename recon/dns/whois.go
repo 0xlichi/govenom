@@ -1,4 +1,4 @@
-// Package dnsrecon
+// Package dnsrecon provides DNS reconnaissance utilities
 package dnsrecon
 
 import (
@@ -10,28 +10,22 @@ import (
 	"github.com/0xlichi/govenom/output"
 )
 
-func Whois(host string) error {
-	// Skip if output already exist
-	if logger.Exists(host, "whois-result") {
-		fmt.Println(output.Success("whois: output already exist, skipping."))
+func Whois(host string, t *output.Tracker) error {
+	if logger.Exists(host, "dns/whois-result") {
+		t.Print(output.Warning("whois: output already exists, skipping."))
 		return nil
 	}
-
-	// Run whois and capture stdout
-	out, err := exec.Command("whois", host, "--version").Output()
+	out, err := exec.Command("whois", host).Output()
 	if err != nil {
-		fmt.Println(output.Error(fmt.Sprintf("whois failed: %v", err)))
-		fmt.Println(output.Error("Failed to run whois, manaul investigation needed."))
+		t.Print(output.Error(fmt.Sprintf("whois failed: %v", err)))
+		t.Print(output.Warning("Failed to run whois, manual investigation needed."))
 		return err
 	}
-
-	// Split output into lines and save as-is
 	lines := strings.Split(strings.TrimSpace(string(out)), "\n")
-	if err := logger.SaveRaw(host, "whois-result", lines); err != nil {
-		fmt.Println(output.Error(fmt.Sprintf("Failed to save whois output: %v", err)))
+	if err := logger.SaveRaw(host, "dns/whois-result", lines); err != nil {
+		t.Print(output.Error(fmt.Sprintf("Failed to save whois output: %v", err)))
 		return err
 	}
-
-	fmt.Println(output.Success("whois done. Output saved to logs/" + host + "whois-result.txt"))
+	t.Print(output.Success("whois done. Output saved to logs/" + host + "/dns/whois-result.txt"))
 	return nil
 }
