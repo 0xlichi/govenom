@@ -1,4 +1,4 @@
-// Package webrecon
+// Package webrecon provides web reconnaissance utilities
 package webrecon
 
 import (
@@ -10,28 +10,22 @@ import (
 	"github.com/0xlichi/govenom/output"
 )
 
-func Gospider(host string) error {
-	// Skip if output already exists
-	if logger.Exists(host, "gospider-result") {
-		fmt.Println(output.Success("gospider: output already exists, skipping."))
+func Gospider(host string, t *output.Tracker) error {
+	if logger.Exists(host, "web/gospider-result") {
+		t.Print(output.Warning("gospider: output already exists, skipping."))
 		return nil
 	}
-
-	// Run gospider and capture stdout
 	out, err := exec.Command("gospider", "-s", "https://"+host, "-c", "10", "-d", "1", "-t", "2").Output()
 	if err != nil {
-		fmt.Println(output.Error(fmt.Sprintf("gospider failed: %v", err)))
-		fmt.Println(output.Error("Failed to run gospider, manual investigation needed."))
+		t.Print(output.Error(fmt.Sprintf("gospider failed: %v", err)))
+		t.Print(output.Warning("Failed to run gospider, manual investigation needed."))
 		return err
 	}
-
-	// Split output into lines and save as-is
 	lines := strings.Split(strings.TrimSpace(string(out)), "\n")
-	if err := logger.SaveRaw(host, "gospider-result", lines); err != nil {
-		fmt.Println(output.Error(fmt.Sprintf("Failed to save gospider output: %v", err)))
+	if err := logger.SaveRaw(host, "web/gospider-result", lines); err != nil {
+		t.Print(output.Error(fmt.Sprintf("Failed to save gospider output: %v", err)))
 		return err
 	}
-
-	fmt.Println(output.Success("gospider done. Output saved to logs/" + host + "gospider-result.txt"))
+	t.Print(output.Success("gospider done. Output saved to logs/" + host + "/web/gospider-result.txt"))
 	return nil
 }
